@@ -1,9 +1,11 @@
 import { error } from "console";
+import HeaderMenu from "@/component/util/header_menu";
+import Pagination from "@/component/util/pagination";
 
 type ProductPageProps = { params: { slug: string[] } };
 
 async function getData() {
-  const res = await fetch("https://fakestoreapi.com/products");
+  const res = await fetch("https://api.jikan.moe/v4/top/anime");
 
   if (!res) {
     throw error;
@@ -16,11 +18,16 @@ export default async function ProductPage(props: ProductPageProps) {
   const { params } = props;
   const products = await getData();
   return (
-    <div className="grid grid-cols-3 place-items-center">
-      {/* <h1>{params.slug ? "Detail Product" : "Product"}</h1> */}
-      {products.length > 0 &&
-        products.map((product: any) => (
-            <div key={product.id} className="mx-auto mt-11 w-80 transform overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-md duration-300 hover:scale-105 hover:shadow-lg">
+    <>
+      <HeaderMenu />
+      <div className="grid grid-cols-3 place-items-center">
+        {/* <h1>{params.slug ? "Detail Product" : "Product"}</h1> */}
+        {products.length > 0 &&
+          products.map((product: any) => (
+            <div
+              key={product.id}
+              className="mx-auto mt-11 w-80 transform overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-md duration-300 hover:scale-105 hover:shadow-lg"
+            >
               <img
                 className="h-48 w-full object-cover p-2"
                 src={product.image}
@@ -43,14 +50,16 @@ export default async function ProductPage(props: ProductPageProps) {
                 </div>
               </div>
             </div>
-        ))}
-      {params.slug && (
-        <>
-          <p>Category = {params.slug[0]}</p>
-          <p>Gender = {params.slug[1]}</p>
-          <p>Id = {params.slug[2]}</p>
-        </>
-      )}
-    </div>
+          ))}
+        {params.slug && (
+          <>
+            <p>Category = {params.slug[0]}</p>
+            <p>Gender = {params.slug[1]}</p>
+            <p>Id = {params.slug[2]}</p>
+          </>
+        )}
+      </div>
+      <Pagination />
+    </>
   );
 }
